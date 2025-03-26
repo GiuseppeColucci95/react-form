@@ -1,33 +1,24 @@
+import { useState } from "react";
 
-const articles = [
-  {
-    id: 1,
-    title: "Article 1",
-    description: "Article 1 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio quaerat nam suscipit corporis aspernatur inventore veniam nobis quisquam doloribus officia nesciunt, molestias minus quasi reprehenderit exercitationem ratione! Eum, unde dolorum."
-  },
-  {
-    id: 2,
-    title: "Article 2",
-    description: "Article 2 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio quaerat nam suscipit corporis aspernatur inventore veniam nobis quisquam doloribus officia nesciunt, molestias minus quasi reprehenderit exercitationem ratione! Eum, unde dolorum."
-  },
-  {
-    id: 3,
-    title: "Article 3",
-    description: "Article 3 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio quaerat nam suscipit corporis aspernatur inventore veniam nobis quisquam doloribus officia nesciunt, molestias minus quasi reprehenderit exercitationem ratione! Eum, unde dolorum."
-  },
-  {
-    id: 4,
-    title: "Article 4",
-    description: "Article 4 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio quaerat nam suscipit corporis aspernatur inventore veniam nobis quisquam doloribus officia nesciunt, molestias minus quasi reprehenderit exercitationem ratione! Eum, unde dolorum."
-  },
-  {
-    id: 5,
-    title: "Article 5",
-    description: "Article 5 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio quaerat nam suscipit corporis aspernatur inventore veniam nobis quisquam doloribus officia nesciunt, molestias minus quasi reprehenderit exercitationem ratione! Eum, unde dolorum."
-  }
-];
+const articlesData = ["Article 1", "Article 2", "Article 3", "Article 4", "Article 5"];
 
 function App() {
+
+  const [articles, setArticles] = useState(articlesData);
+  const [newArticle, setNewArticle] = useState('');
+
+
+  function handleSubmit(e) {
+
+    e.preventDefault();
+
+    console.log(newArticle);
+
+
+    setArticles([...articles, newArticle]);
+
+    setNewArticle('');
+  }
 
   return (
     <>
@@ -37,21 +28,37 @@ function App() {
           <h1>Articles List</h1>
         </header>
 
-        <section id="articles_list" className="mt-3">
+        <section className="mt-4">
 
           {
-            articles.map(article => (
-              <div className="card my-1 px-5 py-2 d-flex flex-row justify-content-between align-items-center">
-                <h4 className="m-0">{article.title}</h4>
+            articles.map((article, index) => (
+              <div key={`article-${index + 1}`} className="card my-1 px-5 py-2 d-flex flex-row justify-content-between align-items-center">
+                <h4 className="m-0">{article}</h4>
                 <div className="d-flex gap-3">
-                  <a href=""><i class="fa-solid fa-pencil"></i></a>
-                  <a href=""><i class="fa-solid fa-trash-can"></i></a>
+                  <a href=""><i className="fa-solid fa-pencil"></i></a>
+                  <a href=""><i className="fa-solid fa-trash-can"></i></a>
                 </div>
               </div>
             ))
           }
 
         </section >
+
+        <form onSubmit={handleSubmit} className="my-4">
+
+          <div className="mb-3 d-flex gap-2">
+            <input type="text"
+              className="px-5 form-control"
+              name="articleTitle"
+              id="articleTitle"
+              aria-describedby="titleHelper"
+              placeholder="Put your new article title here..."
+              value={newArticle}
+              onChange={(e) => setNewArticle(e.target.value)} />
+            <button className="btn btn-primary">Submit</button>
+          </div>
+
+        </form>
 
       </div >
 
