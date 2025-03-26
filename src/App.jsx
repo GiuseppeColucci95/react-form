@@ -6,18 +6,55 @@ function App() {
 
   const [articles, setArticles] = useState(articlesData);
   const [newArticle, setNewArticle] = useState('');
+  const [indexToModify, setIndexToModify] = useState(0);
 
 
   function handleSubmit(e) {
 
     e.preventDefault();
 
-    console.log(newArticle);
-
-
     setArticles([...articles, newArticle]);
 
     setNewArticle('');
+  }
+
+  function handleDelete(index) {
+
+    setArticles(articles.filter((article, articleIndex) => articleIndex !== index));
+  }
+
+  function handleEdit(article, index) {
+
+    const editEl = document.getElementById('edit');
+    const submitEl = document.getElementById('submit');
+
+
+
+    setNewArticle(article);
+    editEl.classList.remove('d-none');
+    submitEl.classList.add('d-none');
+
+
+
+    setIndexToModify(index);
+  }
+
+  function handleSaveEdit(e) {
+    e.preventDefault();
+    const editEl = document.getElementById('edit');
+    const submitEl = document.getElementById('submit');
+
+    const modifiedArticle = newArticle;
+
+    const articlesToModify = [...articles];
+
+    articlesToModify[indexToModify] = modifiedArticle;
+
+    setArticles(articlesToModify);
+    setNewArticle('');
+
+    editEl.classList.add('d-none');
+    submitEl.classList.remove('d-none');
   }
 
   return (
@@ -35,10 +72,10 @@ function App() {
               <div key={`article-${index + 1}`} className="card my-1 px-5 py-2 d-flex flex-row justify-content-between align-items-center">
                 <h4 className="m-0">{article}</h4>
                 <div className="d-flex gap-3">
-                  <a href=""><i className="fa-solid fa-pencil"></i></a>
-                  <a href=""><i className="fa-solid fa-trash-can"></i></a>
+                  <i className="fa-solid fa-pencil" onClick={() => handleEdit(article, index)}></i>
+                  <i className="fa-solid fa-trash-can" onClick={() => handleDelete(index)}></i>
                 </div>
-              </div>
+              </div >
             ))
           }
 
@@ -55,13 +92,13 @@ function App() {
               placeholder="Put your new article title here..."
               value={newArticle}
               onChange={(e) => setNewArticle(e.target.value)} />
-            <button className="btn btn-primary">Submit</button>
+            <button id="submit" className="btn btn-primary">Submit</button>
+            <button id="edit" className="btn btn-primary d-none" onClick={(e) => handleSaveEdit(e)}>Edit</button>
           </div>
 
         </form>
 
       </div >
-
     </>
   )
 }
